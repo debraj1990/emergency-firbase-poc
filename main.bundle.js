@@ -20,7 +20,7 @@ exports = module.exports = __webpack_require__(55)();
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "li {\r\n  list-style: none;\r\n  background: #d1703c;\r\n  color: #fff;\r\n  height: 0;\r\n  line-height: 2em;\r\n  margin: 0;\r\n  padding: 0 0.5em;\r\n  overflow: hidden;\r\n  width: 10em;\r\n}\r\n\r\nli.show {\r\n  height: 2em;\r\n  margin: 2px 0;\r\n}", ""]);
 
 // exports
 
@@ -33,7 +33,7 @@ module.exports = module.exports.toString();
 /***/ 169:
 /***/ (function(module, exports) {
 
-module.exports = "<h1>\r\n  {{title}}\r\n</h1>\r\n<ul>\r\n  <li class=\"text\" *ngFor=\"let item of items | async\">\r\n    {{item.$value}}\r\n  </li>\r\n</ul>"
+module.exports = "<h1>\r\n  {{title}}\r\n</h1>\r\n<ul>\r\n  <li class=\"show\" *ngFor=\"let item of items | async\">\r\n    {{item.$value}}\r\n  </li>\r\n</ul>\r\n<button id=\"add-to-list\">Add a list item</button>"
 
 /***/ }),
 

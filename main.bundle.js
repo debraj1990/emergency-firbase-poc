@@ -20,7 +20,7 @@ exports = module.exports = __webpack_require__(55)();
 
 
 // module
-exports.push([module.i, "li {\r\n  list-style: none;\r\n  background: #d1703c;\r\n  color: #fff;\r\n  height: 0;\r\n  line-height: 2em;\r\n  margin: 0;\r\n  padding: 0 0.5em;\r\n  overflow: hidden;\r\n  width: 10em;\r\n}\r\n\r\nli.show {\r\n  height: 2em;\r\n  margin: 2px 0;\r\n}", ""]);
+exports.push([module.i, "li {\r\n  list-style: none;\r\n  background: #d1703c;\r\n  color: #fff;\r\n  height: 0;\r\n  line-height: 2em;\r\n  margin: 0;\r\n  padding: 0 0.5em;\r\n  overflow: hidden;\r\n  width: 10em;\r\n}\r\n\r\nli.show {\r\n  height: 2em;\r\n  margin: 2px 0;\r\n}\r\n\r\nh1 {\r\n  -webkit-animation-duration: 3s;\r\n          animation-duration: 3s;\r\n  -webkit-animation-name: slidein;\r\n          animation-name: slidein;\r\n  color: green\r\n}\r\n\r\n@-webkit-keyframes slidein {\r\n  from {\r\n    margin-left: 100%;\r\n    width: 300%; \r\n  }\r\n\r\n  to {\r\n    margin-left: 0%;\r\n    width: 100%;\r\n  }\r\n}\r\n\r\n@keyframes slidein {\r\n  from {\r\n    margin-left: 100%;\r\n    width: 300%; \r\n  }\r\n\r\n  to {\r\n    margin-left: 0%;\r\n    width: 100%;\r\n  }\r\n}", ""]);
 
 // exports
 

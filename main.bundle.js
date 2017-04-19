@@ -70,13 +70,13 @@ AppComponent = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(107);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_angularfire2__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_firebase_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_firebase_service__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_angular2_flash_messages__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_angular2_flash_messages___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_angular2_flash_messages__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_component__ = __webpack_require__(110);
@@ -111,12 +111,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 // Must export the config
 var firebaseConfig = {
-    apiKey: "AIzaSyAIWv235df4dnhma5MGq-4yb5dfGanpOcQ",
-    authDomain: "mockdril.firebaseapp.com",
-    databaseURL: "https://mockdril.firebaseio.com",
-    projectId: "mockdril",
-    storageBucket: "mockdril.appspot.com",
-    messagingSenderId: "255196713141"
+    apiKey: "AIzaSyCyad4JC8fxka0UCUwz9Bdcu6yDJ-K0958",
+    authDomain: "emergency-aid-assistant.firebaseapp.com",
+    databaseURL: "https://emergency-aid-assistant.firebaseio.com",
+    projectId: "emergency-aid-assistant",
+    storageBucket: "emergency-aid-assistant.appspot.com",
+    messagingSenderId: "522495986276"
 };
 var firebaseAuthConfig = {
     provider: __WEBPACK_IMPORTED_MODULE_5_angularfire2__["a" /* AuthProviders */].Google,
@@ -125,8 +125,9 @@ var firebaseAuthConfig = {
 var appRoutes = [
     { path: '', component: __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__["a" /* HomeComponent */] },
     { path: 'listings', component: __WEBPACK_IMPORTED_MODULE_10__components_listings_listings_component__["a" /* ListingsComponent */] },
-    { path: 'listing/:id', component: __WEBPACK_IMPORTED_MODULE_12__components_listing_listing_component__["a" /* ListingComponent */] },
-    { path: 'addlisting', component: __WEBPACK_IMPORTED_MODULE_13__components_addlisting_addlisting_component__["a" /* AddlistingComponent */] }
+    { path: 'listing/:incidentid', component: __WEBPACK_IMPORTED_MODULE_12__components_listing_listing_component__["a" /* ListingComponent */] },
+    { path: 'addlisting', component: __WEBPACK_IMPORTED_MODULE_13__components_addlisting_addlisting_component__["a" /* AddlistingComponent */] },
+    { path: 'edit-listing/:incidentid', component: __WEBPACK_IMPORTED_MODULE_14__components_editlisting_editlisting_component__["a" /* EditlistingComponent */] }
 ];
 var AppModule = (function () {
     function AppModule() {
@@ -166,8 +167,8 @@ AppModule = __decorate([
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(24);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddlistingComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -191,9 +192,9 @@ var AddlistingComponent = (function () {
     AddlistingComponent.prototype.onAddSubmit = function () {
         var listing = {
             title: this.title,
-            city: this.title,
-            owner: this.owner,
-            bedrooms: this.bedrooms,
+            city: this.city,
+            responseowner: this.responseowner,
+            incidentid: this.incidentId,
             price: this.price,
             type: this.type
         };
@@ -221,6 +222,8 @@ var _a, _b;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(24);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EditlistingComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -232,10 +235,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var EditlistingComponent = (function () {
-    function EditlistingComponent() {
+    function EditlistingComponent(firebaseService, router, route) {
+        this.firebaseService = firebaseService;
+        this.router = router;
+        this.route = route;
     }
     EditlistingComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.id = this.route.snapshot.params['incidentid'];
+        this.firebaseService.getListingDetails(this.id).subscribe(function (listing) {
+            _this.title = listing.title;
+            _this.responseowner = listing.responseowner;
+            _this.city = listing.city;
+            _this.incidentid = listing.incidentid;
+            _this.price = listing.price;
+            _this.type = listing.type;
+        });
+    };
+    EditlistingComponent.prototype.onEditSubmit = function () {
+        var listing = {
+            title: this.title,
+            responseowner: this.responseowner,
+            city: this.city,
+            incidentid: this.incidentid,
+            price: this.price,
+            type: this.type
+        };
+        this.firebaseService.updateListing(this.id, listing);
+        this.router.navigate(['/listings']);
     };
     return EditlistingComponent;
 }());
@@ -245,9 +275,10 @@ EditlistingComponent = __decorate([
         template: __webpack_require__(204),
         styles: [__webpack_require__(187)]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__["a" /* FirebaseService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__["a" /* FirebaseService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* ActivatedRoute */]) === "function" && _c || Object])
 ], EditlistingComponent);
 
+var _a, _b, _c;
 //# sourceMappingURL=editlisting.component.js.map
 
 /***/ }),
@@ -257,6 +288,8 @@ EditlistingComponent = __decorate([
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(24);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -268,10 +301,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var HomeComponent = (function () {
-    function HomeComponent() {
+    function HomeComponent(firebaseService, router, route) {
+        this.firebaseService = firebaseService;
+        this.router = router;
+        this.route = route;
     }
     HomeComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        //Get ID
+        this.firebaseService.getListings().subscribe(function (listings) {
+            console.log(listings);
+            _this.listings = listings;
+        });
     };
     return HomeComponent;
 }());
@@ -281,9 +325,10 @@ HomeComponent = __decorate([
         template: __webpack_require__(205),
         styles: [__webpack_require__(188)]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__["a" /* FirebaseService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__["a" /* FirebaseService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* ActivatedRoute */]) === "function" && _c || Object])
 ], HomeComponent);
 
+var _a, _b, _c;
 //# sourceMappingURL=home.component.js.map
 
 /***/ }),
@@ -293,8 +338,10 @@ HomeComponent = __decorate([
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_firebase__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_firebase__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -308,6 +355,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ListingComponent = (function () {
     function ListingComponent(firebaseService, router, route) {
         this.firebaseService = firebaseService;
@@ -317,12 +365,24 @@ var ListingComponent = (function () {
     ListingComponent.prototype.ngOnInit = function () {
         var _this = this;
         //Get ID
-        this.id = this.route.snapshot.params['id'];
+        this.id = this.route.snapshot.params['incidentid'];
         this.firebaseService.getListingDetails(this.id).subscribe(function (listing) {
             _this.listing = listing;
             console.log(listing);
             //@TODO - Storage Ref
+            var storageRef = __WEBPACK_IMPORTED_MODULE_3_firebase__["storage"]().ref();
+            var spaceRef = storageRef.child(listing.path);
+            storageRef.child(listing.path).getDownloadURL().then(function (url) {
+                //Set image URl
+                _this.imageUrl = url;
+            }).catch(function (error) {
+                console.log(error);
+            });
         });
+    };
+    ListingComponent.prototype.onDeleteClick = function () {
+        this.firebaseService.deleteListing(this.id);
+        this.router.navigate(['/listings']);
     };
     return ListingComponent;
 }());
@@ -345,7 +405,7 @@ var _a, _b, _c;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_firebase_service__ = __webpack_require__(18);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListingsComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -450,6 +510,77 @@ var environment = {
     production: false
 };
 //# sourceMappingURL=environment.js.map
+
+/***/ }),
+
+/***/ 18:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angularfire2__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_firebase__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FirebaseService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var FirebaseService = (function () {
+    function FirebaseService(af) {
+        this.af = af;
+        this.folder = 'listingimages';
+    }
+    FirebaseService.prototype.getListings = function () {
+        this.listings = this.af.database.list('/incident-master');
+        return this.listings;
+    };
+    FirebaseService.prototype.getListingDetails = function (id) {
+        this.listing = this.af.database.object('/incident-master/' + id);
+        return this.listing;
+    };
+    FirebaseService.prototype.addListing = function (listing) {
+        var _this = this;
+        // Create root ref
+        var storageRef = __WEBPACK_IMPORTED_MODULE_2_firebase__["storage"]().ref();
+        var _loop_1 = function (selectedFile) {
+            var path = "/" + this_1.folder + "/" + selectedFile.name;
+            var iRef = storageRef.child(path);
+            iRef.put(selectedFile).then(function (snapshot) {
+                listing.image = selectedFile.name;
+                listing.path = path;
+                return _this.listings.push(listing);
+            });
+        };
+        var this_1 = this;
+        for (var _i = 0, _a = [document.getElementById('image').files[0]]; _i < _a.length; _i++) {
+            var selectedFile = _a[_i];
+            _loop_1(selectedFile);
+        }
+    };
+    FirebaseService.prototype.updateListing = function (id, listing) {
+        return this.listings.update(id, listing);
+    };
+    FirebaseService.prototype.deleteListing = function (id) {
+        return this.listings.remove(id);
+    };
+    return FirebaseService;
+}());
+FirebaseService = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_angularfire2__["d" /* AngularFire */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_angularfire2__["d" /* AngularFire */]) === "function" && _a || Object])
+], FirebaseService);
+
+var _a;
+//# sourceMappingURL=firebase.service.js.map
 
 /***/ }),
 
@@ -589,28 +720,28 @@ module.exports = "<app-navbar></app-navbar>\n<div class=\"container\">\n<flash-m
 /***/ 203:
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"['/listings']\">Back</a>\n<br />\n<h2 class=\"page-header\">Add Listing</h2>\n<form (submit)=\"onAddSubmit()\">\n  <div class=\"form-group\">\n    <label>Title</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"title\" name=\"title\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>City</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"city\" name=\"city\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Owner</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"owner\" name=\"owner\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Bedrooms</label>\n    <input class=\"form-control\" type=\"number\" [(ngModel)]=\"bedrooms\" name=\"bedrooms\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Type</label>\n    <select class=\"form-control\" type=\"text\" [(ngModel)]=\"type\" name=\"type\" required>\n      <option value=\"Estate\">Estate</option>\n      <option value=\"Condo\">Condo</option>\n      <option value=\"Apartment\">Apartment</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <input id=\"image\" name=\"image\" [(ngModel)]=\"image\" type=\"file\" >\n  </div>\n  <div class=\"form-group\">\n    <label>Price</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"price\" name=\"price\" required>\n  </div>\n  <input type=\"submit\" value=\"submit\" class=\"btn btn-success\">\n</form>\n"
+module.exports = "<a [routerLink]=\"['/listings']\">Back</a>\n<br />\n<h2 class=\"page-header\">Add Listing</h2>\n<form (submit)=\"onAddSubmit()\">\n  <div class=\"form-group\">\n    <label>Title</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"title\" name=\"title\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>City</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"city\" name=\"city\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Owner</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"responseowner\" name=\"responseowner\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>incident information</label>\n    <input class=\"form-control\" type=\"number\" [(ngModel)]=\"incidentId\" name=\"incidentId\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Type</label>\n    <select class=\"form-control\" type=\"text\" [(ngModel)]=\"type\" name=\"type\" required>\n      <option value=\"Major\">Major</option>\n      <option value=\"Minor\">Minor</option>\n      <option value=\"Critical\">Critical</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <input id=\"image\" name=\"image\" [(ngModel)]=\"image\" type=\"file\" >\n  </div>\n  <div class=\"form-group\">\n    <label>Price</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"price\" name=\"price\" required>\n  </div>\n  <input type=\"submit\" value=\"submit\" class=\"btn btn-success\">\n</form>\n"
 
 /***/ }),
 
 /***/ 204:
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  editlisting works!\n</p>\n"
+module.exports = "<a [routerLink]=\"['/listings']\">Back</a>\n<br />\n<h2 class=\"page-header\">Edit Incident</h2>\n<form (submit)=\"onEditSubmit()\">\n  <div class=\"form-group\">\n    <label>Title</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"title\" name=\"title\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>City</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"city\" name=\"city\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Owner</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"responseowner\" name=\"responseowner\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>incident information</label>\n    <input class=\"form-control\" type=\"number\" [(ngModel)]=\"incidentId\" name=\"incidentId\" required>\n  </div>\n  <div class=\"form-group\">\n    <label>Type</label>\n    <select class=\"form-control\" type=\"text\" [(ngModel)]=\"type\" name=\"type\" required>\n      <option value=\"Major\">Major</option>\n      <option value=\"Minor\">Minor</option>\n      <option value=\"Critical\">Critical</option>\n    </select>\n  </div>\n  \n  <div class=\"form-group\">\n    <label>Price</label>\n    <input class=\"form-control\" type=\"text\" [(ngModel)]=\"price\" name=\"price\" required>\n  </div>\n  <input type=\"submit\" value=\"submit\" class=\"btn btn-success\">\n</form>\n"
 
 /***/ }),
 
 /***/ 205:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron\">\n        <h1>Incident Listing</h1>\n        <p class=\"lead\">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>\n        <p><a class=\"btn btn-lg btn-success\" href=\"#\" role=\"button\">Sign in with Google</a></p>\n      </div>"
+module.exports = "<div class=\"jumbotron\" *ngFor=\"let listing of listings\">\n        <h1>{{listing.title}} <small>{{listing.city}}</small></h1>\n        <p class=\"lead\">{{listing.type}}</p>\n        <p><a class=\"btn btn-lg btn-success\" href=\"#\" role=\"button\">Response Owner: {{listing.responseowner}}</a></p>\n      </div>"
 
 /***/ }),
 
 /***/ 206:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"listing\">\n<a [routerLink]=\"['/listings']\">Go Back</a>\n<br>\n<h2 class=\"page-header\">{{listing.title}} <small>{{listing.city}}</small></h2>\n<div class=\"row\">\n  <div class=\"col-md-4\">\n    <!-- IMAGE HERE -->\n  </div>\n  <div class=\"col-md-8\">\n    <ul class=\"list-group\">\n      <li class=\"list-group-item\">Owner: {{listing.owner}}</li>\n      <li class=\"list-group-item\">Bedrooms: {{listing.bedrooms}}</li>\n      <li class=\"list-group-item\">Type: {{listing.type}}</li>\n      <li class=\"list-group-item\">Price: {{listing.price}}</li>\n    </ul>\n  </div>\n  <a class=\"btn btn-default\" href=\"#\">Edit</a>\n  <a class=\"btn btn-danger\" href=\"#\">Delete</a>\n</div>\n</div>"
+module.exports = "<div *ngIf=\"listing\">\n<a [routerLink]=\"['/listings']\">Go Back</a>\n<br>\n<h2 class=\"page-header\">{{listing.title}} <small>{{listing.city}}</small></h2>\n<div class=\"row\">\n  <div class=\"col-md-4\">\n    <!-- IMAGE HERE -->\n      <img style=\"width:100%\" class=\"thumbnail\" src=\"{{imageUrl}}\">\n\n  </div>\n  <div class=\"col-md-8\">\n    <ul class=\"list-group\">\n      <li class=\"list-group-item\">Name: {{listing.responseowner}}</li>\n      <li class=\"list-group-item\">Incident information: {{listing.incidentid}}</li>\n      <li class=\"list-group-item\">Type: {{listing.type}}</li>\n      <li class=\"list-group-item\">Price: {{listing.price}}</li>\n    </ul>\n  </div>\n  <a class=\"btn btn-primary\" [routerLink]=\"['/edit-listing/'+listing.$key]\">Edit</a>\n  <a class=\"btn btn-danger\" (click)=\"onDeleteClick()\">Delete</a>\n</div>\n</div>"
 
 /***/ }),
 
@@ -624,7 +755,7 @@ module.exports = "<ul class=\"list-group\">\n  <li class=\"list-group-item\" *ng
 /***/ 208:
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-inverse\">\n      <div class=\"container\">\n        <div class=\"navbar-header\">\n          <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n          </button>\n          <a class=\"navbar-brand\" href=\"#\">My Demo Dril</a>\n        </div>\n        <div id=\"navbar\" class=\"collapse navbar-collapse\">\n          <ul class=\"nav navbar-nav navbar-left\">\n            <li><a [routerLink]=\"['/']\">Home</a></li>\n            <li *ngIf=\"(af.auth | async)\"><a [routerLink]=\"['/listings']\">Listings</a></li>\n             <li *ngIf=\"(af.auth | async)\"><a [routerLink]=\"['/addlisting']\">Add Listing</a></li>\n    \n          </ul>\n          <ul class=\"nav navbar-nav navbar-right\">\n            <li *ngIf=\"!(af.auth | async)\"><a (click)=\"login()\">Login</a></li>\n            <li *ngIf=\"(af.auth | async)\"><a (click)=\"logout()\">Logout</a></li>\n           </ul>\n        </div><!--/.nav-collapse -->\n      </div>\n    </nav>\n"
+module.exports = "<nav class=\"navbar navbar-inverse\">\n      <div class=\"container\">\n        <div class=\"navbar-header\">\n          <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n          </button>\n          <a class=\"navbar-brand\" href=\"#\">My Emergency AID Assistant</a>\n        </div>\n        <div id=\"navbar\" class=\"collapse navbar-collapse\">\n          <ul class=\"nav navbar-nav navbar-left\">\n            <li><a [routerLink]=\"['/']\">Home</a></li>\n            <li *ngIf=\"(af.auth | async)\"><a [routerLink]=\"['/listings']\">Listings</a></li>\n             <li *ngIf=\"(af.auth | async)\"><a [routerLink]=\"['/addlisting']\">Add Listing</a></li>\n    \n          </ul>\n          <ul class=\"nav navbar-nav navbar-right\">\n            <li *ngIf=\"!(af.auth | async)\"><a (click)=\"login()\">Login</a></li>\n            <li *ngIf=\"(af.auth | async)\"><a (click)=\"logout()\">Logout</a></li>\n           </ul>\n        </div><!--/.nav-collapse -->\n      </div>\n    </nav>\n"
 
 /***/ }),
 
@@ -633,71 +764,6 @@ module.exports = "<nav class=\"navbar navbar-inverse\">\n      <div class=\"cont
 
 module.exports = __webpack_require__(103);
 
-
-/***/ }),
-
-/***/ 34:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angularfire2__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_firebase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_firebase__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FirebaseService; });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var FirebaseService = (function () {
-    function FirebaseService(af) {
-        this.af = af;
-        this.folder = 'listingimages';
-    }
-    FirebaseService.prototype.getListings = function () {
-        this.listings = this.af.database.list('/listings');
-        return this.listings;
-    };
-    FirebaseService.prototype.getListingDetails = function (id) {
-        this.listing = this.af.database.object('/listings/' + id);
-        return this.listing;
-    };
-    FirebaseService.prototype.addListing = function (listing) {
-        var _this = this;
-        // Create root ref
-        var storageRef = __WEBPACK_IMPORTED_MODULE_2_firebase__["storage"]().ref();
-        var _loop_1 = function (selectedFile) {
-            var path = "/" + this_1.folder + "/" + selectedFile.name;
-            var iRef = storageRef.child(path);
-            iRef.put(selectedFile).then(function (snapshot) {
-                listing.image = selectedFile.name;
-                listing.path = path;
-                return _this.listings.push(listing);
-            });
-        };
-        var this_1 = this;
-        for (var _i = 0, _a = [document.getElementById('image').files[0]]; _i < _a.length; _i++) {
-            var selectedFile = _a[_i];
-            _loop_1(selectedFile);
-        }
-    };
-    return FirebaseService;
-}());
-FirebaseService = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_angularfire2__["d" /* AngularFire */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_angularfire2__["d" /* AngularFire */]) === "function" && _a || Object])
-], FirebaseService);
-
-var _a;
-//# sourceMappingURL=firebase.service.js.map
 
 /***/ })
 

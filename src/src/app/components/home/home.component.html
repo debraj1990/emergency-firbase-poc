@@ -1,0 +1,5 @@
+<div class="jumbotron" *ngFor="let listing of listings">
+        <h1>{{listing.title}} <small>{{listing.city}}</small></h1>
+        <p class="lead">{{listing.type}}</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Response Owner: {{listing.responseowner}}</a></p>
+      </div>

@@ -4,7 +4,7 @@ import {FirebaseService} from '../../services/firebase.service';
 @Component({
   selector: 'app-listings',
   templateUrl: './listings.component.html',
-  styleUrls: ['./listings.component.css']
+  styleUrls: ['./listings.component.scss']
 })
 export class ListingsComponent implements OnInit {
   listings:any;

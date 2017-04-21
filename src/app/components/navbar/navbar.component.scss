@@ -1,0 +1,26 @@
+.navbar-inverse {
+    height: 95px;
+}
+
+.navbar-brand {
+    //background: url(../../../assets/logo.png) no-repeat;
+    text-indent: -999px;
+    width: 500px;
+    height: 92px;
+    overflow: hidden;    
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.navbar-nav {
+    > li {
+        > a {
+          @media (min-width: 768px) {
+              padding-top: 40px;
+              padding-bottom: 33px;
+          }
+        }
+    }
+}

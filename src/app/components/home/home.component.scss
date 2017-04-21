@@ -1,0 +1,45 @@
+.grey {
+    background: #e6e6e6;
+    min-height: 650px;
+}
+
+.home-container {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+
+    .btn-success {
+        width: 350px;
+        border-radius: 80px;
+        -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.42);
+        -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.42);
+        box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.42);
+    }
+
+    textarea {
+        height: 125px;
+    }
+}
+
+.jumbotron {
+    padding-bottom: 0;
+    h1 {
+        font-size: 48px;
+        text-align: center;
+    }
+}
+
+.pic-link {
+    padding: 44px 0;
+
+    img {
+        margin-right: 10px;
+    }
+
+    a {
+        font-size: 25px;
+        color: #000;
+    }
+}
+
+

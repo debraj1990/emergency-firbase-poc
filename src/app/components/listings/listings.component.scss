@@ -1,0 +1,43 @@
+// Listing page
+
+.listing-iteam {
+    max-width: 1130px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    padding: 25px 10px;
+    border: 1px solid #c5c6c6;
+    -webkit-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    position: relative;
+
+    &:first-child {
+        margin-top: 60px;
+    }
+
+    .jumbotron {
+        background: none;
+    }
+
+    .label {
+        width: 70px;
+        height: 70px;
+        border-radius: 80px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: -2px;
+        top: -19px;
+        -webkit-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 1);
+        -moz-box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 1);
+        box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 1);
+        font-size: 83%;
+        -ms-transform: rotate(-45deg); 
+        -webkit-transform: rotate(-45deg); 
+        transform: rotate(-45deg);
+    }
+}
